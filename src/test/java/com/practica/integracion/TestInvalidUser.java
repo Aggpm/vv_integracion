@@ -134,4 +134,44 @@ public class TestInvalidUser {
 				new ArrayList<Object>(Arrays.asList(1, 2)));
 
 	}
+
+	@Test
+	@DisplayName("ValidSystem \"deleteRemoteSystem\"")
+	public void InvalidUserValidSystem4() throws Exception {
+		User invalidUser = new User("1", "Ana", "Lopez", "Madrid",
+				new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
+
+		String validId = ("1");
+		when(mockGenericDao.deleteSomeData(null, validId)).thenReturn(false);
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
+
+		assertThrows(SystemManagerException.class,
+				() -> manager.deleteRemoteSystem(invalidUser.getId(), validId));
+
+		ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao).deleteSomeData(null, validId);
+	}
+
+	@Test
+	@DisplayName("ValidSystem \"deleteRemoteSystem\"")
+	public void InvalidUserInvalidSystem4() throws Exception {
+		User invalidUser = new User("1", "Ana", "Lopez", "Madrid",
+				new ArrayList<Object>(Arrays.asList(1, 2)));
+		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
+
+		String invalidId = ("1");
+		when(mockGenericDao.deleteSomeData(null, invalidId)).thenReturn(false);
+
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
+
+		assertThrows(SystemManagerException.class,
+				() -> manager.deleteRemoteSystem(invalidUser.getId(), invalidId));
+
+		ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao).deleteSomeData(null, invalidId);
+	}
 }
