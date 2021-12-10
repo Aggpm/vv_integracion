@@ -32,7 +32,7 @@ public interface GenericDAO {
 	 * Elimina un dato
 	 * 
 	 * @param auth informacion de autenticación para roles
-	 * @param data dato a borrar
+	 * @param \data dato a borrar
 	 * @return true si todo fue bien, false si no se pudo eliminar
 	 * @throws OperationNotSupportedException si no se puede realizar la operacion por 
 	 *
