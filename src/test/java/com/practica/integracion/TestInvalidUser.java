@@ -164,8 +164,8 @@ public class TestInvalidUser {
 		assertThrows(SystemManagerException.class,
 				() -> manager.deleteRemoteSystem(invalidUser.getId(), validId));
 
-		ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
-		ordered.verify(mockGenericDao).deleteSomeData(null, validId);
+		ordered.verify(mockAuthDao, times(0)).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, validId);
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class TestInvalidUser {
 		assertThrows(SystemManagerException.class,
 				() -> manager.deleteRemoteSystem(invalidUser.getId(), invalidId));
 
-		ordered.verify(mockAuthDao).getAuthData(invalidUser.getId());
-		ordered.verify(mockGenericDao).deleteSomeData(null, invalidId);
+		ordered.verify(mockAuthDao, times(0)).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao, times(1)).deleteSomeData(null, invalidId);
 	}
 }
