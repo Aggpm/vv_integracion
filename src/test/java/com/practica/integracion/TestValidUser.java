@@ -52,8 +52,8 @@ public class TestValidUser {
 		Collection<Object> retorno = manager.startRemoteSystem(validUser.getId(), validId);
 		assertEquals(retorno.toString(), "[uno, dos]");
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + validId);
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + validId);
 	}
 
 	@Test
@@ -77,8 +77,8 @@ public class TestValidUser {
 				() -> manager.startRemoteSystem(validUser.getId(), invalidId), "Fallo en la prediccion");
 
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + invalidId);
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + invalidId);
 	}
 
 	@Test
@@ -104,8 +104,8 @@ public class TestValidUser {
 		Collection<Object> retorno = manager.stopRemoteSystem(validUser.getId(), validId);
 		assertEquals(retorno.toString(), "[uno, dos]");
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + validId);
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + validId);
 	}
 
 	@Test
@@ -129,8 +129,8 @@ public class TestValidUser {
 				() -> manager.stopRemoteSystem(validUser.getId(), invalidId), "Fallo en la prediccion");
 
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).getSomeData(validUser, "where id=" + invalidId);
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).getSomeData(validUser, "where id=" + invalidId);
 	}
 
 	@Test
@@ -153,8 +153,8 @@ public class TestValidUser {
 		manager.addRemoteSystem(validUser.getId(), validId);
 		//assertEquals no necesario ya que la función es de tipo void
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).updateSomeData(validUser, validId);
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).updateSomeData(validUser, validId);
 	}
 
 	@Test
@@ -174,12 +174,12 @@ public class TestValidUser {
 
 		// instanciamos el manager con los mock creados
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
-		assertThrows(SystemManagerException.class,
+		SystemManagerException exc = assertThrows(SystemManagerException.class,
 				() -> manager.addRemoteSystem(validUser.getId(), invalidId), "Fallo en la prediccion");
-
+		//assertFalse(exc.getMessage().contains("cannot add remote"));
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).updateSomeData(validUser, invalidId);
+		ordered.verify(mockAuthDao, times(1)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).updateSomeData(validUser, invalidId);
 	}
 
 	@Test
@@ -200,8 +200,8 @@ public class TestValidUser {
 		manager.deleteRemoteSystem(validUser.getId(), validId);
 		//assertEquals() no necesario por ser función de tipo void
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).deleteSomeData(validUser, validId);
+		ordered.verify(mockAuthDao, times(0)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, validId);
 	}
 
 	@Test
@@ -224,7 +224,7 @@ public class TestValidUser {
 				() -> manager.deleteRemoteSystem(validUser.getId(), invalidId));
 		//assertEquals() no necesario por ser función de tipo void
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
-		ordered.verify(mockAuthDao).getAuthData(validUser.getId());
-		ordered.verify(mockGenericDao).deleteSomeData(validUser, invalidId);
+		ordered.verify(mockAuthDao, times(0)).getAuthData(validUser.getId());
+		ordered.verify(mockGenericDao, times(1)).deleteSomeData(validUser, invalidId);
 	}
 }
