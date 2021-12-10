@@ -62,21 +62,21 @@ public class TestInvalidUser {
 				new ArrayList<Object>(Arrays.asList(1, 2)));
 		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
 
-		String validId = ("12345");
-		when(mockGenericDao.getSomeData(null, "where id=" + validId))
+		String invalidId = ("12345");
+		when(mockGenericDao.getSomeData(null, "where id=" + invalidId))
 				.thenThrow(new OperationNotSupportedException());
 
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
 
 		assertThrows(SystemManagerException.class,
-				() -> manager.startRemoteSystem(invalidUser.getId(), validId));
+				() -> manager.startRemoteSystem(invalidUser.getId(), invalidId));
 
 		//Collection<Object> retorno = manager.startRemoteSystem(invalidUser.getId(), validId);
 		//assertEquals(retorno.toString(), null);
 
 		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
-		ordered.verify(mockGenericDao, times(1)).getSomeData(null, "where id=" + validId);
+		ordered.verify(mockGenericDao, times(1)).getSomeData(null, "where id=" + invalidId);
 	}
 
 	@Test
@@ -110,25 +110,46 @@ public class TestInvalidUser {
 				new ArrayList<Object>(Arrays.asList(1, 2)));
 		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(null);
 
-		String validId = ("12345");
-		when(mockGenericDao.getSomeData(null, "where id=" + validId))
+		String invalidId = ("12345");
+		when(mockGenericDao.getSomeData(null, "where id=" + invalidId))
 				.thenThrow(new OperationNotSupportedException());
 
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
 
 		assertThrows(SystemManagerException.class,
-				() -> manager.startRemoteSystem(invalidUser.getId(), validId));
+				() -> manager.startRemoteSystem(invalidUser.getId(), invalidId));
 
 		//Collection<Object> retorno = manager.startRemoteSystem(invalidUser.getId(), validId);
 		//assertEquals(retorno.toString(), null);
 
 		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
-		ordered.verify(mockGenericDao, times(1)).getSomeData(null, "where id=" + validId);
+		ordered.verify(mockGenericDao, times(1)).getSomeData(null, "where id=" + invalidId);
 	}
 
 	@Test
 	@DisplayName("ValidSystem \"addRemoteSystem\"")
+	public void InvalidUserValidSystem3() throws Exception {
+		User invalidUser = new User("1", "Ana", "Lopez", "Madrid",
+				new ArrayList<Object>(Arrays.asList(1, 2)));
+		String validId = "12345";
+		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(invalidUser);
+		when(mockGenericDao.updateSomeData(invalidUser, validId)).thenThrow(new OperationNotSupportedException());
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+		SystemManagerException excepcion = assertThrows(SystemManagerException.class, () -> {
+
+			manager.addRemoteSystem(invalidUser.getId(), validId);
+		});
+		assertEquals(OperationNotSupportedException.class, excepcion.getCause().getClass());
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao, times(1)).updateSomeData(invalidUser, validId);
+
+	}
+
+	@Test
+	@DisplayName("InvalidSystem \"addRemoteSystem\"")
 	public void InvalidUserInvalidSystem3() throws Exception {
 		User invalidUser = new User("1", "Ana", "Lopez", "Madrid",
 				new ArrayList<Object>(Arrays.asList(1, 2)));
@@ -169,7 +190,7 @@ public class TestInvalidUser {
 	}
 
 	@Test
-	@DisplayName("ValidSystem \"deleteRemoteSystem\"")
+	@DisplayName("InvalidSystem \"deleteRemoteSystem\"")
 	public void InvalidUserInvalidSystem4() throws Exception {
 		User invalidUser = new User("1", "Ana", "Lopez", "Madrid",
 				new ArrayList<Object>(Arrays.asList(1, 2)));
