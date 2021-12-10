@@ -14,7 +14,6 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -22,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -222,7 +220,8 @@ public class TestValidUser {
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
 		// llamada al api a probar
 		manager.deleteRemoteSystem(validUser.getId(), invalidId);
-		assertThrows(SystemManagerException.class, () -> manager.deleteRemoteSystem(validUser.getId(), invalidId));
+		assertThrows(SystemManagerException.class,
+				() -> manager.deleteRemoteSystem(validUser.getId(), invalidId));
 		//assertEquals() no necesario por ser función de tipo void
 		// vemos si se ejecutan las llamadas a los dao, y en el orden correcto
 		ordered.verify(mockAuthDao).getAuthData(validUser.getId());

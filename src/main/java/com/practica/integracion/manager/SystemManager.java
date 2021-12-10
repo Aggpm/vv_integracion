@@ -37,7 +37,7 @@ public class SystemManager {
 		try {
 			Collection<Object> remote = dao.getSomeData(auth, "where id=" + remoteId);
 			return remote;
-			// remote.stop();
+			//remote.stop();
 		} catch (OperationNotSupportedException e) {
 			throw new SystemManagerException(e);
 		}
