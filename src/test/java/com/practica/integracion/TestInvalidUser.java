@@ -132,6 +132,19 @@ public class TestInvalidUser {
 	public void InvalidUserInvalidSystem3() throws Exception {
 		User invalidUser = new User("1", "Ana", "Lopez", "Madrid",
 				new ArrayList<Object>(Arrays.asList(1, 2)));
+		String invalidId = "12345";
+		when(mockAuthDao.getAuthData(invalidUser.getId())).thenReturn(invalidUser);
+		when(mockGenericDao.updateSomeData(invalidUser, invalidId)).thenThrow(new OperationNotSupportedException());
+		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
+		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
+		SystemManagerException excepcion = assertThrows(SystemManagerException.class, () -> {
+
+			manager.addRemoteSystem(invalidUser.getId(), invalidId);
+		});
+		assertEquals(OperationNotSupportedException.class, excepcion.getCause().getClass());
+
+		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
+		ordered.verify(mockGenericDao, times(1)).updateSomeData(invalidUser, invalidId);
 
 	}
 
