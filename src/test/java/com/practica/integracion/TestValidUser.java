@@ -63,7 +63,7 @@ public class TestValidUser {
 				new ArrayList<Object>(Arrays.asList(1, 2)));
 		when(mockAuthDao.getAuthData(validUser.getId())).thenReturn(validUser);
 
-		String invalidId = "12345"; // id valido de sistema
+		String invalidId = "12345"; // id invalido de sistema
 		when(mockGenericDao.getSomeData(validUser, "where id=" + invalidId))
 				.thenThrow(new OperationNotSupportedException());
 
