@@ -46,7 +46,7 @@ public class TestInvalidUser {
 		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
 
 		SystemManagerException exc = assertThrows(SystemManagerException.class,
-				() -> manager.deleteRemoteSystem(invalidUser.getId(), validId));
+				() -> manager.startRemoteSystem(invalidUser.getId(), validId));
 		assertEquals(OperationNotSupportedException.class, exc.getCause().getClass());
 
 		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
@@ -68,7 +68,7 @@ public class TestInvalidUser {
 		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
 
 		SystemManagerException exc = assertThrows(SystemManagerException.class,
-				() -> manager.deleteRemoteSystem(invalidUser.getId(), invalidId));
+				() -> manager.startRemoteSystem(invalidUser.getId(), invalidId));
 		assertEquals(OperationNotSupportedException.class, exc.getCause().getClass());
 
 		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
@@ -90,7 +90,7 @@ public class TestInvalidUser {
 		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
 
 		SystemManagerException exc = assertThrows(SystemManagerException.class,
-				() -> manager.deleteRemoteSystem(invalidUser.getId(), validId));
+				() -> manager.stopRemoteSystem(invalidUser.getId(), validId));
 		assertEquals(OperationNotSupportedException.class, exc.getCause().getClass());
 
 		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
@@ -112,7 +112,7 @@ public class TestInvalidUser {
 		SystemManager manager = new SystemManager (mockAuthDao, mockGenericDao);
 
 		SystemManagerException exc = assertThrows(SystemManagerException.class,
-				() -> manager.deleteRemoteSystem(invalidUser.getId(), invalidId));
+				() -> manager.stopRemoteSystem(invalidUser.getId(), invalidId));
 		assertEquals(OperationNotSupportedException.class, exc.getCause().getClass());
 
 		ordered.verify(mockAuthDao, times(1)).getAuthData(invalidUser.getId());
@@ -131,9 +131,8 @@ public class TestInvalidUser {
 
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
-		SystemManagerException excepcion = assertThrows(SystemManagerException.class, () -> {
-
-			manager.addRemoteSystem(invalidUser.getId(), validId);
+		SystemManagerException excepcion = assertThrows(SystemManagerException.class,
+				() -> {manager.addRemoteSystem(invalidUser.getId(), validId);
 		});
 		assertEquals(OperationNotSupportedException.class, excepcion.getCause().getClass());
 
@@ -153,9 +152,8 @@ public class TestInvalidUser {
 				.thenThrow(new OperationNotSupportedException());
 		InOrder ordered = inOrder(mockAuthDao, mockGenericDao);
 		SystemManager manager = new SystemManager(mockAuthDao, mockGenericDao);
-		SystemManagerException excepcion = assertThrows(SystemManagerException.class, () -> {
-
-			manager.addRemoteSystem(invalidUser.getId(), invalidId);
+		SystemManagerException excepcion = assertThrows(SystemManagerException.class,
+				() -> {manager.addRemoteSystem(invalidUser.getId(), invalidId);
 		});
 		assertEquals(OperationNotSupportedException.class, excepcion.getCause().getClass());
 
